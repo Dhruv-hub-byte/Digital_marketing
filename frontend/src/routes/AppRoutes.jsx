@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Login";
-import Dashboard from "../pages/Dashboard";
-import Campaigns from "../pages/Campaigns";
+import Login from "../pages/login";
+import Dashboard from "../pages/dashboard";
+import Campaigns from "../pages/campaigns";
 import Audience from "../pages/audience";
-import Leads from "../pages/Leads";
-import Reports from "../pages/Reports";
+import Leads from "../pages/leads";
+import Reports from "../pages/reports";
 import Settings from "../pages/setting";
 
 export default function AppRoutes() {
