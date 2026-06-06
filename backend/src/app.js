@@ -27,10 +27,11 @@ app.use(
 );
 
 app.use(session({
-  secret:process.env.JWT_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false }
+  secret:
+  "Dhruv_DigitalMarketing_2026_SecretKey_9X7P4M2K8L",
+  resave:false,
+  saveUninitialized:true,
+  cookie:{ secure:false }
 }));
 
 app.use(passport.initialize());
