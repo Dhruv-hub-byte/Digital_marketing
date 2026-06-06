@@ -28,10 +28,10 @@ app.use(
 
 app.use(session({
   secret:
-  "Dhruv_DigitalMarketing_2026_SecretKey_9X7P4M2K8L",
-  resave:false,
-  saveUninitialized:true,
-  cookie:{ secure:false }
+    "Dhruv_DigitalMarketing_2026_SecretKey_9X7P4M2K8L",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
 }));
 
 app.use(passport.initialize());

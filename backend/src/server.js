@@ -1,14 +1,9 @@
-require("dotenv").config({
-  path: "./backend/.env"
-});
-
-console.log(
-  "CLIENT ID:",
-  process.env.LINKEDIN_CLIENT_ID
-);
+require("dotenv").config();
 
 const app = require("./app");
 
-app.listen(5000, () => {
-  console.log("Server Running on Port 5000");
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server Running on Port ${PORT}`);
 });

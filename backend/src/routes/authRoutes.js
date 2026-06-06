@@ -32,7 +32,7 @@ router.get(
     "linkedin",
     {
       failureRedirect:
-      "/login"
+        "/login"
     }
   ),
 
