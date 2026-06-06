@@ -15,12 +15,19 @@ const passport = require("passport");
 
 require("./config/passport");
 
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
+app.use(
+  cors({
+    origin:
+      "https://digital-marketing-inky-phi.vercel.app",
+    credentials: true
+  })
+);
+
 app.use(session({
-  secret:
-  "secret-key",
+  secret:process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: { secure: false }
