@@ -1,18 +1,47 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
+const navItems = [
+  { to: "/dashboard", icon: "⬡",  label: "Dashboard" },
+  { to: "/campaigns", icon: "📢", label: "Campaigns" },
+  { to: "/audience",  icon: "🎯", label: "Audience" },
+  { to: "/leads",     icon: "💼", label: "Leads" },
+  { to: "/reports",   icon: "📊", label: "Reports" },
+  { to: "/settings",  icon: "⚙️", label: "Settings" },
+];
 
 function Sidebar() {
-  return (
-    <div className="bg-dark text-white p-3 vh-100">
-      <h4>Marketing System</h4>
+  const location = useLocation();
 
-      <ul className="list-unstyled">
-        <li><Link to="/dashboard">Dashboard</Link></li>
-        <li><Link to="/campaigns">Campaigns</Link></li>
-        <li><Link to="/audience">Audience</Link></li>
-        <li><Link to="/leads">Leads</Link></li>
-        <li><Link to="/reports">Reports</Link></li>
-        <li><Link to="/settings">Settings</Link></li>
-      </ul>
+  return (
+    <div className="dm-sidebar">
+      <div className="dm-sidebar-brand">
+        <div className="brand-icon">📈</div>
+        <div>
+          <h2>Marketing Hub</h2>
+          <span>User Panel</span>
+        </div>
+      </div>
+
+      <nav className="dm-sidebar-nav">
+        <div className="dm-sidebar-section">Menu</div>
+        {navItems.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            className={`dm-nav-link ${location.pathname === item.to ? "active" : ""}`}
+          >
+            <span className="nav-icon">{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+
+      <div className="dm-sidebar-footer">
+        <Link to="/login" className="dm-logout-btn">
+          <span>🚪</span>
+          Logout
+        </Link>
+      </div>
     </div>
   );
 }
