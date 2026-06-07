@@ -4,15 +4,22 @@ const passport = require("passport");
 
 const {
   registerUser,
-  loginUser
+  loginUser,
+  getMe,
+  updateUserProfile
 } = require("../controllers/authController");
 
-router.post(
-  "/register",
-  registerUser
-);
+const authMiddleware = require("../middleware/authMiddleware");
+
+router.post("/register", registerUser);
 
 router.post("/login", loginUser);
+
+// Get current logged-in user's profile (pre-populate settings form)
+router.get("/me", authMiddleware, getMe);
+
+// Update current logged-in user's profile (admin & regular user both use this)
+router.put("/profile", authMiddleware, updateUserProfile);
 
 router.get("/test", (req, res) => {
   res.send("Auth Route Working");
@@ -20,28 +27,15 @@ router.get("/test", (req, res) => {
 
 router.get(
   "/linkedin",
-  passport.authenticate(
-    "linkedin"
-  )
+  passport.authenticate("linkedin")
 );
 
 router.get(
   "/linkedin/callback",
-
-  passport.authenticate(
-    "linkedin",
-    {
-      failureRedirect:
-        "/login"
-    }
-  ),
-
+  passport.authenticate("linkedin", { failureRedirect: "/login" }),
   (req, res) => {
-
-    res.redirect(
-      "http://localhost:5173/dashboard"
-    );
-
+    const frontendURL = process.env.FRONTEND_URL || "http://localhost:5173";
+    res.redirect(`${frontendURL}/dashboard`);
   }
 );
 
