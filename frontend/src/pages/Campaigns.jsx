@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import api from "../services/api";
 
@@ -8,14 +8,34 @@ function Campaigns() {
   const [budget, setBudget] = useState("");
   const [status, setStatus] = useState("Active");
   const [loading, setLoading] = useState(false);
+  const [campaigns, setCampaigns] = useState([]);
+
+  useEffect(() => {
+    fetchCampaigns();
+  }, []);
+
+  const fetchCampaigns = async () => {
+    try {
+      const res = await api.get("/campaigns");
+      setCampaigns(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   async function handleCreate(e) {
     e.preventDefault();
     try {
       setLoading(true);
-      await api.post("/admin/campaigns", { name, type, budget, status });
+      await api.post("/campaigns", { 
+        campaign_name: name, 
+        objective: type, 
+        budget, 
+        status 
+      });
       alert("Campaign created!");
       setName(""); setBudget("");
+      fetchCampaigns();
     } catch (err) {
       console.log(err);
       alert("Failed to create campaign");
@@ -23,6 +43,15 @@ function Campaigns() {
       setLoading(false);
     }
   }
+
+  const statusColor = (status) => {
+    if (!status) return "info";
+    const s = status.toLowerCase();
+    if (s === "active") return "success";
+    if (s === "paused") return "warning";
+    if (s === "draft")  return "info";
+    return "danger";
+  };
 
   return (
     <div className="dm-layout">
@@ -34,9 +63,10 @@ function Campaigns() {
               <div className="dm-page-title">Campaigns</div>
               <div className="dm-page-subtitle">Create and manage your marketing campaigns</div>
             </div>
+            <span className="dm-badge info">{campaigns.length} Campaigns</span>
           </div>
 
-          <div className="dm-card" style={{ maxWidth: 560 }}>
+          <div className="dm-card" style={{ maxWidth: 560, marginBottom: "28px" }}>
             <div className="dm-card-header">
               <span className="dm-card-title">📢 Create New Campaign</span>
             </div>
@@ -54,7 +84,7 @@ function Campaigns() {
                 </div>
 
                 <div className="dm-form-group">
-                  <label className="dm-label">Campaign Type</label>
+                  <label className="dm-label">Campaign Objective</label>
                   <select className="dm-select" value={type} onChange={(e) => setType(e.target.value)}>
                     <option>Lead Generation</option>
                     <option>Brand Awareness</option>
@@ -90,10 +120,54 @@ function Campaigns() {
               </form>
             </div>
           </div>
+
+          <div className="dm-card">
+            <div className="dm-card-header">
+              <span className="dm-card-title">📋 My Campaigns</span>
+            </div>
+            <div className="dm-table-wrap">
+              <table className="dm-table">
+                <thead>
+                  <tr>
+                    <th>Campaign Name</th>
+                    <th>Objective</th>
+                    <th>Budget</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {campaigns.length === 0 ? (
+                    <tr>
+                      <td colSpan={4}>
+                        <div className="dm-empty">
+                          <div className="dm-empty-icon">📢</div>
+                          <p>No campaigns found</p>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    campaigns.map((c) => (
+                      <tr key={c.id}>
+                        <td><strong>{c.campaign_name}</strong></td>
+                        <td>{c.objective || "—"}</td>
+                        <td>${c.budget?.toLocaleString?.() ?? c.budget}</td>
+                        <td>
+                          <span className={`dm-badge ${statusColor(c.status)}`}>
+                            {c.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
   );
 }
 
-export default Campaigns;
+export default Campaigns;
