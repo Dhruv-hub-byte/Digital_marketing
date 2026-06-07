@@ -6,6 +6,8 @@ const { getAdminDashboard } = require("../controllers/adminDashboardController")
 
 const { getUsers, getCampaigns, getLeads } = require("../controllers/adminController");
 
+const { updateProfile } = require("../controllers/settingsController");
+
 const authMiddleware = require("../middleware/authMiddleware");
 
 const adminMiddleware = require("../middleware/adminMiddleware");
@@ -38,4 +40,11 @@ router.get(
   getLeads
 );
 
-module.exports = router;
+router.put(
+  "/settings",
+  authMiddleware,
+  adminMiddleware,
+  updateProfile
+);
+
+module.exports = router;
